@@ -1,10 +1,24 @@
 <template>
-  <div class="grid grid-cols-3 gap-4">
-    <product
-      v-for="product in products"
-      :key="product.id"
-      :info="product"
-    ></product>
+  <div class="flex flex-col">
+    <label class="flex flex-col items-start px-4 mt-1 w-full">
+      <span class="text-gray-700">Filter Products By</span>
+      <select v-model="selectedFilter" class="form-select max-w-xs">
+        <option
+          v-for="(filter, index) in filterOptions"
+          :key="index"
+          :value="filter.value"
+          >{{ filter.text }}</option
+        >
+      </select>
+    </label>
+
+    <div class="grid grid-cols-3 gap-4">
+      <product
+        v-for="product in products"
+        :key="product.id"
+        :info="product"
+      ></product>
+    </div>
   </div>
 </template>
 
@@ -15,13 +29,45 @@ import product from "./Product.vue";
 export default {
   data() {
     return {
-      products: productData.DATA.sort((product1, product2) => {
-        return product1.id < product2.id && product1.price > product2.price;
-      })
+      filterOptions: [
+        {
+          text: "By Lowest Id",
+          value: 1
+        },
+        {
+          text: "Price - Low to High",
+          value: 2
+        }
+      ],
+      selectedFilter: 1,
+      products: productData.DATA
     };
+  },
+  methods: {
+    sortProductsBy(filter) {
+      return filter === 2
+        ? this.products.sort((product1, product2) => {
+            return product1.price > product2.price;
+          })
+        : this.products.sort((product1, product2) => {
+            return product1.id > product2.id;
+          });
+    }
   },
   components: {
     product
+  },
+  watch: {
+    selectedFilter(val) {
+      if (val) {
+        this.sortProductsBy(val);
+      }
+    }
+  },
+  mounted() {
+    if (this.products.length > 0) {
+      this.sortProductsBy(1);
+    }
   }
 };
 </script>

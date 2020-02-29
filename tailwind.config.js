@@ -20,5 +20,6 @@ module.exports = {
       "500": "500px",
       full: "100%"
     }
-  }
+  },
+  plugins: [require("@tailwindcss/custom-forms")]
 };
