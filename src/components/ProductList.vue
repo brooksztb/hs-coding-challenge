@@ -7,17 +7,12 @@
           v-for="(filter, index) in filterOptions"
           :key="index"
           :value="filter.value"
-          >{{ filter.text }}</option
-        >
+        >{{ filter.text }}</option>
       </select>
     </label>
 
     <div class="grid grid-cols-3 gap-4">
-      <product
-        v-for="product in products"
-        :key="product.id"
-        :info="product"
-      ></product>
+      <product v-for="product in products" :key="product.id" :info="product"></product>
     </div>
   </div>
 </template>
@@ -47,10 +42,10 @@ export default {
     sortProductsBy(filter) {
       return filter === 2
         ? this.products.sort((product1, product2) => {
-            return product1.price > product2.price;
+            return product1.price > product2.price ? 1 : -1;
           })
         : this.products.sort((product1, product2) => {
-            return product1.id > product2.id;
+            return product1.id > product2.id ? 1 : -1;
           });
     }
   },
